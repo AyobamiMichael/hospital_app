@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "695739965007",
+    "project_id": "fir-testingapp-1ea9f",
+    "storage_bucket": "fir-testingapp-1ea9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695739965007:android:ed4cf18586452b2a8dd43a",
+        "android_client_info": {
+          "package_name": "com.example.firebaseexample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2UUFHueeh5o1ybGlwAQd-wC212u4ESuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695739965007:android:6aed3420e51d77048dd43a",
+        "android_client_info": {
+          "package_name": "com.example.hospital_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2UUFHueeh5o1ybGlwAQd-wC212u4ESuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
