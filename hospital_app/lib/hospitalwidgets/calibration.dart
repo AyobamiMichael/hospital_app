@@ -85,13 +85,16 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                   onPressed: () async {
                     await unMountDrip(
                         WirelessClassState.wifiGateway.toString(), 'UNMOUNT');
+
                     if (message == '200') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Unmounted successfully'),
-                          duration: Duration(seconds: 2),
-                          behavior: SnackBarBehavior.floating,
-                        ),
+                      Fluttertoast.showToast(
+                        msg: "Unmounted",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 20.0,
                       );
                     } else {
                       Fluttertoast.showToast(
@@ -179,7 +182,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
         setState(() {
           lowestDripLevel =
               WirelessClassState.listOfSensorValues[0].substring(13);
-          message = response.statusCode.toString();
+          message = '200';
         });
         // Save highest value
         SharedPreferences prefs = await SharedPreferences.getInstance();

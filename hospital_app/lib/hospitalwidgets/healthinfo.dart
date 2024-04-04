@@ -49,6 +49,8 @@ class PatientHealthData extends StatelessWidget {
                     builder: (context) => const HealthNotification()),
               );
               // displayNotificationsDetails();
+
+              //Navigator.pop(context);
             })
       ]),
       body: const PatientScreen(),
@@ -87,6 +89,7 @@ class PatientScreenState extends State<PatientScreen> {
   String pulse2 = '';
   String bloodPressure2 = '';
   String dripLevel2 = '';
+  String dripLevel3 = '';
   double simulatedDripLevel = 0.0;
   List<String> sensorDataList2 = [];
   double xOffSet = 10;
@@ -307,6 +310,7 @@ class PatientScreenState extends State<PatientScreen> {
 
       pulse2 = WirelessClassState.listOfSensorValues[2];
       dripLevel2 = WirelessClassState.listOfSensorValues[0].substring(13);
+      dripLevel3 = double.parse(dripLevel2).clamp(0, 100).toString();
       temperature2 = WirelessClassState.listOfSensorValues[3].substring(20);
       temperatureDisplayValue = temperature2;
       // BP TO BE CHANGED LATER
@@ -548,7 +552,7 @@ class PatientScreenState extends State<PatientScreen> {
           Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                '      Temperature: $temperature2°C     Drip Level: $dripLevel2%',
+                '      Temperature: $temperature2°C     Drip Level: $dripLevel3%',
                 style: const TextStyle(fontSize: 17, color: Colors.white),
               )),
 
@@ -567,7 +571,8 @@ class PatientScreenState extends State<PatientScreen> {
               child: SizedBox(
             child: CustomPaint(
               // TAKE NOTE portrateheight
-              painter: DripLevelPainter(double.parse(dripLevel2) / 100,
+              // DRIP LEVEL DISPLAY
+              painter: DripLevelPainter(double.parse(dripLevel3) / 100,
                   portraitWidth - 270, portraitWidth - 380),
             ),
           )),
@@ -1069,6 +1074,7 @@ class DripLevelPainter extends CustomPainter {
       waterColor = Colors.red;
     }
 */
+
     if (dripLevel > 0.5) {
       waterColor = Colors.green;
     }
