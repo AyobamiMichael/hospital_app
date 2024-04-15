@@ -199,6 +199,7 @@ class _PatientRecordedDataGraphState extends State<PatientRecordedDataGraph> {
       dataTimer.cancel();
       playTimer?.cancel();
     }
+    print('I GET DATA FILE');
   }
 
   int counter = 0;
@@ -207,7 +208,7 @@ class _PatientRecordedDataGraphState extends State<PatientRecordedDataGraph> {
     try {
       csvTable = _dataRepositoryModel.csvTable;
       // row is changing and column
-      // print(csvTable);
+      print(csvTable);
       // print(csvTable[1][0]);
       for (int i = 1; i < csvTable.length; i++) {
         recordedTimeList.add(csvTable[i][0]);
@@ -546,6 +547,7 @@ class _PatientRecordedDataGraphState extends State<PatientRecordedDataGraph> {
       stopIcon = Icons.stop;
       stopIconColor = Colors.red;
     });
+    print('I DEY PLAY');
   }
 
   void pause() {

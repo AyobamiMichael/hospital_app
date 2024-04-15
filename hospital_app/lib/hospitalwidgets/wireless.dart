@@ -212,7 +212,7 @@ class WirelessClassState extends State<WirelessClass> {
     print(listOfSensorValues);
     print('OKAY HEALTH');
     try {
-      if (listOfSensorValues[0].contains('Sensor Level')) {
+      if (listOfSensorValues[0].contains('Sensor DripLevel')) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const PatientHealthData()),

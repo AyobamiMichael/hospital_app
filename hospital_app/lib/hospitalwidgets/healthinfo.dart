@@ -86,10 +86,15 @@ class PatientScreenState extends State<PatientScreen> {
   String heartBeat3 = '';
   String breathingRate2 = '';
   String temperature2 = '';
+  double temperature3 = 0.0;
   String pulse2 = '';
   String bloodPressure2 = '';
+  String dripLevel1 = '';
   String dripLevel2 = '';
   String dripLevel3 = '';
+  String dripLevelA = '';
+  String dripLevelB = '';
+  String dripLevelC = '';
   double simulatedDripLevel = 0.0;
   List<String> sensorDataList2 = [];
   double xOffSet = 10;
@@ -159,11 +164,11 @@ class PatientScreenState extends State<PatientScreen> {
     try {
       if (storedLowestDripLevel != 'No dripvalue') {
         setState(() {
-          driplevelrange = (double.tryParse(dripLevel2)! -
+          driplevelrange = (double.tryParse(dripLevel1)! -
               double.parse(storedLowestDripLevel));
           print('DRIPLEVELRANGE' + driplevelrange.toString());
 
-          dripleveldisplay = (double.tryParse(dripLevel2)! -
+          dripleveldisplay = (double.tryParse(dripLevel1)! -
                   double.tryParse(storedLowestDripLevel)! / driplevelrange) /
               100;
           // %DripLevel = Reading - Lowest / Range * 100
@@ -309,13 +314,19 @@ class PatientScreenState extends State<PatientScreen> {
       breathingRateDisplayValue = breathingRate2;
 
       pulse2 = WirelessClassState.listOfSensorValues[2];
-      dripLevel2 = WirelessClassState.listOfSensorValues[0].substring(13);
-      dripLevel3 = double.parse(dripLevel2).clamp(0, 100).toString();
+      dripLevel1 = WirelessClassState.listOfSensorValues[0].substring(18);
+      dripLevel2 = WirelessClassState.listOfSensorValues[4].substring(19);
+      dripLevel3 = WirelessClassState.listOfSensorValues[5].substring(19);
+      dripLevelA = double.parse(dripLevel1).clamp(0, 100).toString();
+      dripLevelB = double.parse(dripLevel2).clamp(0, 100).toString();
+      dripLevelC = double.parse(dripLevel3).clamp(0, 100).toString();
       temperature2 = WirelessClassState.listOfSensorValues[3].substring(20);
       temperatureDisplayValue = temperature2;
+      temperature3 = double.parse(temperature2);
+
       // BP TO BE CHANGED LATER
-      bloodPressure2 = WirelessClassState.listOfSensorValues[4].substring(17);
-      bloodPressureDisplayValue = bloodPressure2;
+      // bloodPressure2 = WirelessClassState.listOfSensorValues[4].substring(17);
+      // bloodPressureDisplayValue = bloodPressure2;
       //print(heartBeat2);
       getHeartBeatData();
       getBreathingData();
@@ -340,7 +351,7 @@ class PatientScreenState extends State<PatientScreen> {
           breathingRateDisplayValue = breathingRate2;
 
           pulse2 = sensorDataList[3];
-          dripLevel2 = sensorDataList[4];
+          dripLevel1 = sensorDataList[4];
           temperature2 = sensorDataList[1];
           temperatureDisplayValue = temperature2;
           bloodPressure2 = sensorDataList[0];
@@ -444,6 +455,7 @@ class PatientScreenState extends State<PatientScreen> {
           const SizedBox(
             height: 20,
           ),
+          /*
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -476,10 +488,7 @@ class PatientScreenState extends State<PatientScreen> {
                   ),
                 )),
           ),
-          const SizedBox(
-            height: 25,
-          ),
-          Expanded(
+           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
@@ -510,10 +519,8 @@ class PatientScreenState extends State<PatientScreen> {
                     ),
                   ),
                 )),
-          ),
-          const SizedBox(
-            height: 25,
-          ),
+          ),*/
+
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -532,6 +539,9 @@ class PatientScreenState extends State<PatientScreen> {
                         ))),
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           // TEMPERATURE VERTICAL LINE
           Expanded(
             child: SizedBox(
@@ -546,13 +556,10 @@ class PatientScreenState extends State<PatientScreen> {
                   ),
                 )),
           ),
-          const SizedBox(
-            height: 20,
-          ),
           Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                '      Temperature: $temperature2°C     Drip Level: $dripLevel3%',
+                '     Temperature: $temperature2°C',
                 style: const TextStyle(fontSize: 17, color: Colors.white),
               )),
 
@@ -562,18 +569,63 @@ class PatientScreenState extends State<PatientScreen> {
             child: CustomPaint(
               painter: TemperatureLevelPainter(
                   // TAKE NOTE portrateheight
-                  double.parse(temperature2) / 100,
+                  //  double.parse(temperature2) / 100,
+                  temperature3 / 100,
                   portraitWidth - 485,
                   portraitWidth - 355),
             ),
           )),
+
+          const SizedBox(
+            height: 50,
+          ),
+          Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                '      Drip A: $dripLevelA%     Drip B: $dripLevelB%    Drip C: $dripLevelC%',
+                style: const TextStyle(fontSize: 17, color: Colors.white),
+              )),
+
+          /*Expanded(
+              child: SizedBox(
+            width: 2,
+            child: CustomPaint(
+              painter: TemperatureLevelPainter(
+                  // TAKE NOTE portrateheight
+                  //  double.parse(temperature2) / 100,
+                  temperature3 / 100,
+                  portraitWidth - 485,
+                  portraitWidth - 355),
+            ),
+          )),*/
+          // DRIP A
+          Expanded(
+              child: SizedBox(
+            child: CustomPaint(
+              // TAKE NOTE portrateheight
+              // DRIP LEVEL DISPLAY
+              painter: DripLevelPainter(double.parse(dripLevelA) / 100,
+                  portraitWidth - 490, portraitWidth - 357),
+            ),
+          )),
+          // DRIP B
           Expanded(
               child: SizedBox(
             child: CustomPaint(
               // TAKE NOTE portrateheight
               // DRIP LEVEL DISPLAY
               painter: DripLevelPainter(double.parse(dripLevel3) / 100,
-                  portraitWidth - 270, portraitWidth - 380),
+                  portraitWidth - 356, portraitWidth - 384),
+            ),
+          )),
+          // DRIP C
+          Expanded(
+              child: SizedBox(
+            child: CustomPaint(
+              // TAKE NOTE portrateheight
+              // DRIP LEVEL DISPLAY
+              painter: DripLevelPainter(double.parse(dripLevel3) / 100,
+                  portraitWidth - 260, portraitWidth - 410),
             ),
           )),
           const SizedBox(

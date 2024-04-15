@@ -1,3 +1,5 @@
+// IT'S ALL HISTORY, LET NOTHING WORRY YOU.
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_app/hospitalwidgets/wireless.dart';
@@ -25,27 +27,27 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
           title: const Text('Atlantis-UgarSoft'),
         ),
         body: Container(
-          padding: const EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-              width: 1.5,
-            ),
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          height: 300.0,
+          // padding: const EdgeInsets.all(20.0),
+          // decoration: BoxDecoration(
+          // border: Border.all(
+          //  color: Colors.black,
+          // width: 1.5,
+          //),
+          //  borderRadius: BorderRadius.circular(5.0),
+          // ),
+          height: 500.0,
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Drip Calibration',
+                'Drip Calibration A',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 5),
               SizedBox(
                   width: 200,
                   height: 50,
@@ -77,7 +79,167 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                         }
                       },
                       child: const Text('Mount'))),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: 200,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await unMountDrip(
+                        WirelessClassState.wifiGateway.toString(), 'UNMOUNT');
+
+                    if (message == '200') {
+                      Fluttertoast.showToast(
+                        msg: "Unmounted",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 20.0,
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: " Not Unmounted",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 20.0,
+                      );
+                    }
+                  },
+                  child: const Text('Unmount'),
+                ),
+              ),
+              const Divider(
+                color: Colors.black,
+                thickness: 1.5,
+                height: 20,
+                indent: 10,
+                endIndent: 10,
+              ),
+              const Text(
+                'Drip Calibration B',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        print(WirelessClassState.wifiGateway.toString());
+                        await mountDrip(
+                            WirelessClassState.wifiGateway.toString(), 'MOUNT');
+                        if (message == '200') {
+                          Fluttertoast.showToast(
+                            msg: "Mounted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 20.0,
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: " Not Mounted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 20.0,
+                          );
+                        }
+                      },
+                      child: const Text('Mount'))),
+              const SizedBox(height: 15),
+              SizedBox(
+                width: 200,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await unMountDrip(
+                        WirelessClassState.wifiGateway.toString(), 'UNMOUNT');
+
+                    if (message == '200') {
+                      Fluttertoast.showToast(
+                        msg: "Unmounted",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 20.0,
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: " Not Unmounted",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 20.0,
+                      );
+                    }
+                  },
+                  child: const Text('Unmount'),
+                ),
+              ),
+              const Divider(
+                color: Colors.black,
+                thickness: 1.5,
+                height: 20,
+                indent: 10,
+                endIndent: 10,
+              ),
+              const Text(
+                'Drip Calibration C',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        print(WirelessClassState.wifiGateway.toString());
+                        await mountDrip(
+                            WirelessClassState.wifiGateway.toString(), 'MOUNT');
+                        if (message == '200') {
+                          Fluttertoast.showToast(
+                            msg: "Mounted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 20.0,
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: " Not Mounted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 20.0,
+                          );
+                        }
+                      },
+                      child: const Text('Mount'))),
+              const SizedBox(height: 15),
               SizedBox(
                 width: 200,
                 height: 50,
