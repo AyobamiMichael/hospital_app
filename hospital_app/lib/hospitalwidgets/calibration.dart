@@ -18,6 +18,8 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
   String message = '';
   String lowestDripLevel = '';
   String highestDripLevel = '';
+  String dropdownValue = 'Option 1';
+  String radioValue = 'A';
 
   static late List<String> listOfSensorValues;
   @override
@@ -35,51 +37,76 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
           //),
           //  borderRadius: BorderRadius.circular(5.0),
           // ),
-          height: 500.0,
+          height: 315.0,
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Radio(
+                  value: 'A',
+                  groupValue: radioValue,
+                  onChanged: (String? value) {
+                    setState(() {
+                      radioValue = value!;
+                    });
+                  },
+                ),
+                Text('A'),
+                Radio(
+                  value: 'B',
+                  groupValue: radioValue,
+                  onChanged: (String? value) {
+                    setState(() {
+                      radioValue = value!;
+                    });
+                  },
+                ),
+                Text('B'),
+                Radio(
+                  value: 'C',
+                  groupValue: radioValue,
+                  onChanged: (String? value) {
+                    setState(() {
+                      radioValue = value!;
+                    });
+                  },
+                ),
+                Text('C'),
+              ]),
+              SizedBox(height: 20),
+              DropdownButton<String>(
+                value: dropdownValue,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: <String>['Option 1', 'Option 2', 'Option 3']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Divider(
+                height: 20,
+                thickness: 2,
+                color: Colors.grey[300],
+                indent: 20,
+                endIndent: 20,
+              ),
               const Text(
-                'Drip Calibration A',
+                'Drip Calibration',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 5),
-              SizedBox(
-                  width: 200,
-                  height: 50,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        print(WirelessClassState.wifiGateway.toString());
-                        await mountDrip(
-                            WirelessClassState.wifiGateway.toString(), 'MOUNT');
-                        if (message == '200') {
-                          Fluttertoast.showToast(
-                            msg: "Mounted",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.TOP,
-                            timeInSecForIosWeb: 2,
-                            backgroundColor: Colors.black,
-                            textColor: Colors.white,
-                            fontSize: 20.0,
-                          );
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: " Not Mounted",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.TOP,
-                            timeInSecForIosWeb: 2,
-                            backgroundColor: Colors.black,
-                            textColor: Colors.white,
-                            fontSize: 20.0,
-                          );
-                        }
-                      },
-                      child: const Text('Mount'))),
-              const SizedBox(height: 10),
+              const SizedBox(
+                height: 20,
+              ),
               SizedBox(
                 width: 200,
                 height: 50,
@@ -113,21 +140,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                   child: const Text('Unmount'),
                 ),
               ),
-              const Divider(
-                color: Colors.black,
-                thickness: 1.5,
-                height: 20,
-                indent: 10,
-                endIndent: 10,
-              ),
-              const Text(
-                'Drip Calibration B',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               SizedBox(
                   width: 200,
                   height: 50,
@@ -159,6 +172,65 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                         }
                       },
                       child: const Text('Mount'))),
+              Divider(
+                height: 20,
+                thickness: 2,
+                color: Colors.grey[300],
+                indent: 20,
+                endIndent: 20,
+              ),
+
+              /*
+              const SizedBox(height: 5),
+              SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        print(WirelessClassState.wifiGateway.toString());
+                        await mountDrip(
+                            WirelessClassState.wifiGateway.toString(), 'MOUNT');
+                        if (message == '200') {
+                          Fluttertoast.showToast(
+                            msg: "Mounted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 20.0,
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: " Not Mounted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 20.0,
+                          );
+                        }
+                      },
+                      child: const Text('Mount'))),
+              const SizedBox(height: 10),
+              
+              ),
+              const Divider(
+                color: Colors.black,
+                thickness: 1.5,
+                height: 20,
+                indent: 10,
+                endIndent: 10,
+              ),
+              const Text(
+                'Drip Calibration B',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+             
               const SizedBox(height: 15),
               SizedBox(
                 width: 200,
@@ -272,7 +344,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                   },
                   child: const Text('Unmount'),
                 ),
-              )
+              )*/
             ],
           ),
         ));

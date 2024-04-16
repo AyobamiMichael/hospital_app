@@ -11,7 +11,7 @@ class Settings extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const PassWord()),
+          MaterialPageRoute(builder: (context) => const HospitalSettings()),
         );
       },
       style: ElevatedButton.styleFrom(
