@@ -112,8 +112,8 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await unMountDrip(
-                        WirelessClassState.wifiGateway.toString(), 'UNMOUNT');
+                    await unMountDrip(WirelessClassState.wifiGateway.toString(),
+                        'UNMOUNT.$radioValue');
 
                     if (message == '200') {
                       Fluttertoast.showToast(
@@ -148,7 +148,8 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                       onPressed: () async {
                         print(WirelessClassState.wifiGateway.toString());
                         await mountDrip(
-                            WirelessClassState.wifiGateway.toString(), 'MOUNT');
+                            WirelessClassState.wifiGateway.toString(),
+                            'MOUNT.$radioValue');
                         if (message == '200') {
                           Fluttertoast.showToast(
                             msg: "Mounted",
@@ -159,6 +160,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                             textColor: Colors.white,
                             fontSize: 20.0,
                           );
+                          print(radioValue);
                         } else {
                           Fluttertoast.showToast(
                             msg: " Not Mounted",
