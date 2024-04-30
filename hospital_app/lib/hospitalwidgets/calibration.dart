@@ -20,15 +20,29 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
   String highestDripLevel = '';
   String dropdownValue = 'Option 1';
   String radioValue = 'A';
+  String slot1 = 'No value';
+  String slot2 = '';
+  String slot3 = '';
 
   static late List<String> listOfSensorValues;
+  final _dripNameController = TextEditingController();
+  String dripName = '';
+  @override
+  void initState() {
+    super.initState();
+    getSavedDripData(WirelessClassState.wifiGateway.toString(), 'SAVE.DATA');
+
+    saveDripData('HELLO');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Atlantis-UgarSoft'),
         ),
-        body: Container(
+        body: SingleChildScrollView(
+            child: Container(
           // padding: const EdgeInsets.all(20.0),
           // decoration: BoxDecoration(
           // border: Border.all(
@@ -37,52 +51,90 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
           //),
           //  borderRadius: BorderRadius.circular(5.0),
           // ),
-          height: 315.0,
+          height: 520.0,
           alignment: Alignment.center,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Radio(
-                  value: 'A',
-                  groupValue: radioValue,
-                  onChanged: (String? value) {
-                    setState(() {
-                      radioValue = value!;
-                    });
-                  },
+              const Text(
+                'Asign Drip',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text('A'),
-                Radio(
-                  value: 'B',
-                  groupValue: radioValue,
-                  onChanged: (String? value) {
-                    setState(() {
-                      radioValue = value!;
-                    });
-                  },
+              ),
+              Divider(
+                height: 20,
+                thickness: 2,
+                color: Colors.grey[300],
+                indent: 20,
+                endIndent: 20,
+              ),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Radio(
+                        value: 'A',
+                        groupValue: radioValue,
+                        onChanged: (String? value) {
+                          setState(() {
+                            radioValue = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    Text('A'),
+                    SizedBox(width: 50),
+                    Text('None'),
+                  ],
                 ),
-                Text('B'),
-                Radio(
-                  value: 'C',
-                  groupValue: radioValue,
-                  onChanged: (String? value) {
-                    setState(() {
-                      radioValue = value!;
-                    });
-                  },
+                Row(
+                  children: [
+                    Radio(
+                      value: 'B',
+                      groupValue: radioValue,
+                      onChanged: (String? value) {
+                        setState(() {
+                          radioValue = value!;
+                        });
+                      },
+                    ),
+                    Text('B'),
+                    SizedBox(width: 50),
+                    Text('None'),
+                  ],
                 ),
-                Text('C'),
+                Row(
+                  children: [
+                    Radio(
+                      value: 'C',
+                      groupValue: radioValue,
+                      onChanged: (String? value) {
+                        setState(() {
+                          radioValue = value!;
+                        });
+                      },
+                    ),
+                    Text('C'),
+                    SizedBox(width: 50),
+                    Text('None'),
+                  ],
+                )
               ]),
-              SizedBox(height: 20),
               DropdownButton<String>(
-                value: dropdownValue,
+                value: slot1,
                 onChanged: (String? newValue) {
                   setState(() {
-                    dropdownValue = newValue!;
+                    slot1 = newValue!;
                   });
+                  print('DROPDOWN VALUE' + dropdownValue);
+                  // SEND THE KEY TO ARDUINO
+                  assignDripData(
+                      WirelessClassState.wifiGateway.toString(), dropdownValue);
                 },
-                items: <String>['Option 1', 'Option 2', 'Option 3']
+                items: <String>[slot1, slot2, slot3]
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -98,10 +150,33 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                 endIndent: 20,
               ),
               const Text(
-                'Drip Calibration',
+                'Config',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+              Divider(
+                height: 10,
+                thickness: 2,
+                color: Colors.grey[300],
+                indent: 20,
+                endIndent: 20,
+              ),
+              SizedBox(
+                width: 300,
+                height: 50,
+                child: TextFormField(
+                  controller: _dripNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter a name',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter name';
+                    }
+                    return null;
+                  },
                 ),
               ),
               const SizedBox(
@@ -113,9 +188,13 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                 child: ElevatedButton(
                   onPressed: () async {
                     await unMountDrip(WirelessClassState.wifiGateway.toString(),
-                        'UNMOUNT.$radioValue');
-
-                    if (message == '200') {
+                        'UNMOUNT.$dripName');
+                    print(dripName.length);
+                    setState(() {
+                      dripName = _dripNameController.text;
+                    });
+                    if (WirelessClassState.listOfSensorValues[0]
+                        .contains('Sensor DripLevel')) {
                       Fluttertoast.showToast(
                         msg: "Unmounted",
                         toastLength: Toast.LENGTH_SHORT,
@@ -127,7 +206,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                       );
                     } else {
                       Fluttertoast.showToast(
-                        msg: " Not Unmounted",
+                        msg: " Not Connected",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.TOP,
                         timeInSecForIosWeb: 2,
@@ -149,8 +228,18 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                         print(WirelessClassState.wifiGateway.toString());
                         await mountDrip(
                             WirelessClassState.wifiGateway.toString(),
-                            'MOUNT.$radioValue');
-                        if (message == '200') {
+                            'MOUNT.$dripName');
+                        print(dripName);
+                        setState(() {
+                          if (_dripNameController.text.length > 8) {
+                            print('Invalid');
+                            return;
+                          } else {
+                            dripName = _dripNameController.text;
+                          }
+                        });
+                        if (WirelessClassState.listOfSensorValues[0]
+                            .contains('Sensor DripLevel')) {
                           Fluttertoast.showToast(
                             msg: "Mounted",
                             toastLength: Toast.LENGTH_SHORT,
@@ -163,7 +252,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                           print(radioValue);
                         } else {
                           Fluttertoast.showToast(
-                            msg: " Not Mounted",
+                            msg: " Not Connected",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.TOP,
                             timeInSecForIosWeb: 2,
@@ -349,7 +438,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
               )*/
             ],
           ),
-        ));
+        )));
   }
 
   Future<void> mountDrip(String wifiGateway, String dataToSend) async {
@@ -367,23 +456,23 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
         // Disconnect from the Wifi
         // disConnectFromArduinoWireless();
 
-        final responseBody = response.body;
-        final document = htmlparser.parse(responseBody);
+        //final responseBody = response.body;
+        //final document = htmlparser.parse(responseBody);
         // print(document);
-        final wirelessSensorValues = document.querySelectorAll('p');
+        //final wirelessSensorValues = document.querySelectorAll('p');
 
-        listOfSensorValues =
-            wirelessSensorValues.map((element) => element.text).toList();
+        //listOfSensorValues =
+        //  wirelessSensorValues.map((element) => element.text).toList();
         // print(listOfSensorValues[0].substring(13));
         setState(() {
-          highestDripLevel = listOfSensorValues[0].substring(13);
+          //highestDripLevel = listOfSensorValues[0].substring(13);
 
           message = response.statusCode.toString();
         });
         // Save lowest value here
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        Future<bool> result =
-            prefs.setString('HIGHESTDRIPLEVEL', highestDripLevel);
+        //SharedPreferences prefs = await SharedPreferences.getInstance();
+        //Future<bool> result =
+        //prefs.setString('HIGHESTDRIPLEVEL', highestDripLevel);
       } else {
         print('Failed to send data. Status code: ${response.statusCode}');
       }
@@ -425,6 +514,91 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
         Future<bool> result =
             prefs.setString('LOWESTDRIPLEVEL', lowestDripLevel);
         print(result);
+      } else {
+        print('Failed to send data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> getSavedDripData(String wifiGateway, String dataToSend) async {
+    print('okay Data');
+    try {
+      final response = await http.post(
+        Uri.parse('http://$wifiGateway/receiveData'),
+        body: {'': dataToSend},
+      );
+
+      if (response.statusCode == 200) {
+        //print(response.statusCode);
+        print('Data sent successfully!');
+        print('Response from Arduino: ${response.body}');
+
+        final document = htmlparser.parse(response.body);
+        // print(document);
+        // Extract data from HTML
+
+        final wirelessSensorValues = document.querySelectorAll('p');
+        print(wirelessSensorValues);
+        setState(() {
+          // lowestDripLevel =
+          //   WirelessClassState.listOfSensorValues[0].substring(13);
+          message = '200';
+        });
+      } else {
+        print('Failed to send data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> saveDripData(String dataToSend) async {
+    print('SAVEDATA');
+    setState(() {
+      if (WirelessClassState.listOfSensorValues[7].substring(21).isNotEmpty) {
+        slot1 = WirelessClassState.listOfSensorValues[7].substring(21);
+        slot2 = WirelessClassState.listOfSensorValues[8].substring(20);
+        slot3 = WirelessClassState.listOfSensorValues[9].substring(20);
+      } else {
+        slot1 = 'Option 1';
+        slot2 = 'Option 2';
+        slot3 = 'Option 3';
+      }
+
+      //dropdownValue = slot1;
+    });
+
+    print('SLOT ONE' + slot1);
+    print('SLOT TWO' + slot2);
+    print('SLOT THREE' + slot3);
+  }
+
+  Future<void> assignDripData(String wifiGateway, String dataToSend) async {
+    print('okay Data');
+    try {
+      final response = await http.post(
+        Uri.parse('http://$wifiGateway/receiveData'),
+        body: {'': dataToSend},
+      );
+
+      if (response.statusCode == 200) {
+        //print(response.statusCode);
+        print('Data sent successfully!');
+        print('Response from Arduino: ${response.body}');
+
+        final document = htmlparser.parse(response.body);
+        // print(document);
+        // Extract data from HTML
+
+        final wirelessSensorValues = document.querySelectorAll('p');
+        print(wirelessSensorValues);
+        setState(() {
+          // lowestDripLevel =
+          //   WirelessClassState.listOfSensorValues[0].substring(13);
+          message = '200';
+        });
       } else {
         print('Failed to send data. Status code: ${response.statusCode}');
       }
