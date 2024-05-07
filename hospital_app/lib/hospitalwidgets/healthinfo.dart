@@ -152,6 +152,12 @@ class PatientScreenState extends State<PatientScreen> {
     now = DateTime.now();
     // GET DRIP LEVEL
     calculateDripLevel();
+
+    // BLOOD PRESSURE DIALOG BOX TIMMER
+    Timer.periodic(Duration(seconds: 60), (timer) {
+      showDialogBox();
+      print(' BLOOD PRESSURE TIMERSTARTED');
+    });
   }
 
   void calculateDripLevel() async {
@@ -277,6 +283,37 @@ class PatientScreenState extends State<PatientScreen> {
       maxX: tempDataList.isNotEmpty ? tempDataList.last.x : 1,
       minY: 0,
       maxY: 1300,
+    );
+  }
+
+  // BLOOD PRESSURE DIALOGBOX
+  void showDialogBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Dialog Box"),
+          content: Text("Do you want to start or cancel?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Start"),
+              onPressed: () {
+                // Handle Start button click
+                Navigator.of(context).pop();
+                // Add your logic for the Start action here
+              },
+            ),
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                // Handle Cancel button click
+                Navigator.of(context).pop();
+                // Add your logic for the Cancel action here
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

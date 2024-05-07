@@ -62,6 +62,7 @@ dependencies:
   url_launcher: ^6.0.3
   udp: ^5.0.3
   syncfusion_flutter_charts: ^22.1.1
+  vibration: ^1.8.4
 
 dev_dependencies:
   flutter_test:

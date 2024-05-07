@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hospital_app/hospitalwidgets/bloodpressurealert.dart';
 import 'package:hospital_app/hospitalwidgets/wireless.dart';
 import 'package:hospital_app/providers/deviceconnectedprovider.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +47,36 @@ class _BloodPressureState extends State<BloodPressure> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void showDialogBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Dialog Box"),
+          content: Text("Do you want to start or cancel?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Start"),
+              onPressed: () {
+                // Handle Start button click
+                Navigator.of(context).pop();
+                // Add your logic for the Start action here
+              },
+            ),
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                // Handle Cancel button click
+                Navigator.of(context).pop();
+                // Add your logic for the Cancel action here
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

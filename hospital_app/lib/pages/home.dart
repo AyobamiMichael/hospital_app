@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:hospital_app/hospitalwidgets/bloodpressurealert.dart';
 import 'package:hospital_app/pages/home/widget/bluetooth.dart';
 import 'package:hospital_app/pages/home/widget/cloud.dart';
 import 'package:hospital_app/pages/home/widget/header.dart';
@@ -82,6 +85,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    // Activate the bp dialog box using the time interval value gotten form the arduino
     super.initState();
   }
 
