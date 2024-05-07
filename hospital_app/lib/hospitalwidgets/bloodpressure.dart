@@ -59,16 +59,18 @@ class _BloodPressureState extends State<BloodPressure> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("BP TIMER"),
+          title: Text("Blood Pressure Check", textAlign: TextAlign.center),
           content: Text("Check Patient's Blood Pressure"),
           actions: <Widget>[
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(), backgroundColor: Colors.blue),
               child: Text("Start"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
+            ElevatedButton(
               child: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
