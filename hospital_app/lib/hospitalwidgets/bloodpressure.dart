@@ -42,6 +42,11 @@ class _BloodPressureState extends State<BloodPressure> {
     // WirelessClassState().sendData(WirelessClassState.wifiGateway!, 'oxygen');
 
     showOxygenIntheBlood();
+
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      showDialogBox();
+      print('TIMERSTARTED');
+    });
   }
 
   @override
@@ -54,23 +59,19 @@ class _BloodPressureState extends State<BloodPressure> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Dialog Box"),
-          content: Text("Do you want to start or cancel?"),
+          title: Text("BP TIMER"),
+          content: Text("Check Patient's Blood Pressure"),
           actions: <Widget>[
             TextButton(
               child: Text("Start"),
               onPressed: () {
-                // Handle Start button click
                 Navigator.of(context).pop();
-                // Add your logic for the Start action here
               },
             ),
             TextButton(
               child: Text("Cancel"),
               onPressed: () {
-                // Handle Cancel button click
                 Navigator.of(context).pop();
-                // Add your logic for the Cancel action here
               },
             ),
           ],
@@ -104,7 +105,7 @@ class _BloodPressureState extends State<BloodPressure> {
             ),
             const SizedBox(height: 10),
             const Text('Patient Info'),
-            const SizedBox(height: 50),
+            const SizedBox(height: 25),
             Align(
               alignment: Alignment.centerLeft, // Adjust horizontal alignment
               child: Container(
@@ -124,12 +125,12 @@ class _BloodPressureState extends State<BloodPressure> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Center(
                 child: SizedBox(
                     width: MediaQuery.of(context).size.width * 2,
                     child: CustomPaint(painter: LinePainter()))),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight, // Adjust horizontal alignment
               child: Container(
@@ -149,7 +150,70 @@ class _BloodPressureState extends State<BloodPressure> {
                 ),
               ),
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 25),
+            ElevatedButton(
+              onPressed: _submitForm,
+              child: const Text('Submit'),
+            ),
+            Divider(
+              height: 10,
+              thickness: 2,
+              color: Colors.grey[300],
+              indent: 20,
+              endIndent: 20,
+            ),
+            const Text(
+              'BP Correction Factor',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Align(
+              alignment: Alignment.centerLeft, // Adjust horizontal alignment
+              child: Container(
+                width: 120, // Adjust the width as needed
+                child: TextFormField(
+                  controller: _bpController1,
+                  decoration: InputDecoration(
+                    labelText: 'High',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter value';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            Center(
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 2,
+                    child: CustomPaint(painter: LinePainter()))),
+            Align(
+              alignment: Alignment.centerRight, // Adjust horizontal alignment
+              child: Container(
+                width: 120, // Adjust the width as needed
+                child: TextFormField(
+                  controller: _bpController2,
+                  decoration: InputDecoration(
+                    labelText: 'Low',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter value';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             ElevatedButton(
               onPressed: _submitForm,
               child: const Text('Submit'),
