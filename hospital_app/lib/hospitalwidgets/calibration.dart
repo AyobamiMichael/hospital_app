@@ -18,11 +18,15 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
   String message = '';
   String lowestDripLevel = '';
   String highestDripLevel = '';
-  String dropdownValue = 'Option 1';
+  String dropdownValue = '';
   String radioValue = 'A';
   String slot1 = 'No value';
   String slot2 = '';
   String slot3 = '';
+
+  String defaultdrip1 = 'No value';
+  String defaultdrip2 = '';
+  String defaultdrip3 = '';
 
   static late List<String> listOfSensorValues;
   final _dripNameController = TextEditingController();
@@ -30,9 +34,6 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
   @override
   void initState() {
     super.initState();
-    getSavedDripData(WirelessClassState.wifiGateway.toString(), 'SAVE.DATA');
-
-    saveDripData('HELLO');
   }
 
   @override
@@ -123,24 +124,55 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
                   ],
                 )
               ]),
-              DropdownButton<String>(
-                value: slot1,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    slot1 = newValue!;
-                  });
-                  print('DROPDOWN VALUE' + dropdownValue);
-                  // SEND THE KEY TO ARDUINO
-                  assignDripData(
-                      WirelessClassState.wifiGateway.toString(), dropdownValue);
-                },
-                items: <String>[slot1, slot2, slot3]
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 90,
+                      ),
+                      DropdownButton<String>(
+                        value: defaultdrip1,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!;
+                          });
+                          print('DROPDOWN VALUE' + dropdownValue);
+                          // SEND THE KEY TO ARDUINO
+                          assignDripData(
+                              WirelessClassState.wifiGateway.toString(),
+                              dropdownValue);
+                        },
+                        items: <String>[
+                          defaultdrip1,
+                          defaultdrip2,
+                          defaultdrip3
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await refreshDripData(
+                              WirelessClassState.wifiGateway.toString(),
+                              'SAVE.DATA');
+
+                          getAndSaveDripDataFromArduinoListOfSensorsData(
+                              'HELLO');
+                          retriveDripData('HELLO');
+                          setState(() {});
+                        },
+                        child: const Text('Refresh'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               Divider(
                 height: 20,
@@ -510,10 +542,10 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
           message = '200';
         });
         // Save highest value
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        Future<bool> result =
-            prefs.setString('LOWESTDRIPLEVEL', lowestDripLevel);
-        print(result);
+        //SharedPreferences prefs = await SharedPreferences.getInstance();
+        //Future<bool> result =
+        //   prefs.setString('LOWESTDRIPLEVEL', lowestDripLevel);
+        //print(result);
       } else {
         print('Failed to send data. Status code: ${response.statusCode}');
       }
@@ -522,7 +554,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
     }
   }
 
-  Future<void> getSavedDripData(String wifiGateway, String dataToSend) async {
+  Future<void> refreshDripData(String wifiGateway, String dataToSend) async {
     print('okay Data');
     try {
       final response = await http.post(
@@ -554,10 +586,12 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
     }
   }
 
-  Future<void> saveDripData(String dataToSend) async {
+  Future<void> getAndSaveDripDataFromArduinoListOfSensorsData(
+      String dataToSend) async {
     print('SAVEDATA');
     setState(() {
-      if (WirelessClassState.listOfSensorValues[7].substring(21).isNotEmpty) {
+      if (WirelessClassState.listOfSensorValues[0]
+          .contains('Sensor DripLevel')) {
         slot1 = WirelessClassState.listOfSensorValues[7].substring(21);
         slot2 = WirelessClassState.listOfSensorValues[8].substring(20);
         slot3 = WirelessClassState.listOfSensorValues[9].substring(20);
@@ -570,13 +604,65 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
       //dropdownValue = slot1;
     });
 
-    print('SLOT ONE' + slot1);
-    print('SLOT TWO' + slot2);
-    print('SLOT THREE' + slot3);
+    //print('SLOT ONE' + slot1);
+    //print('SLOT TWO' + slot2);
+    //print('SLOT THREE' + slot3);
+
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('defaultdrip1', slot1);
+    prefs.setString('defaultdrip2', slot2);
+    prefs.setString('defaultdrip3', slot3);
+  }
+
+  Future<void> retriveDripData(String dataToSend) async {
+    print('RETRIVEDATA');
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      // defaultdrip2 = prefs.getString('defaultdrip2')!;
+      //defaultdrip3 = prefs.getString('defaultdrip3')!;
+
+      if (defaultdrip1.isEmpty || defaultdrip1.contains('S NOT CHANGE')) {
+        defaultdrip1 = 'INVALID VALUE';
+      } else {
+        defaultdrip1 = prefs.getString('defaultdrip1')!;
+      }
+
+      if (defaultdrip2.isEmpty || defaultdrip2.contains('S NOT CHANGE')) {
+        defaultdrip2 = 'INVALID VALUE';
+      } else {
+        defaultdrip2 = prefs.getString('defaultdrip2')!;
+      }
+
+      if (defaultdrip3.isEmpty || defaultdrip3.contains('S NOT CHANGE')) {
+        defaultdrip3 = 'INVALID VALUE';
+      } else {
+        defaultdrip3 = prefs.getString('defaultdrip3')!;
+      }
+
+      /* if (WirelessClassState.listOfSensorValues[0]
+          .contains('Sensor DripLevel')) {
+        // slot1 = WirelessClassState.listOfSensorValues[7].substring(21);
+        // slot2 = WirelessClassState.listOfSensorValues[8].substring(20);
+        // slot3 = WirelessClassState.listOfSensorValues[9].substring(20);
+      } else {
+        slot1 = 'Option 1';
+        slot2 = 'Option 2';
+        slot3 = 'Option 3';
+      }
+       */
+      //dropdownValue = slot1;
+    });
+
+    print('SLOT ONE' + defaultdrip1);
+    print('SLOT TWO' + defaultdrip2);
+    print('SLOT THREE' + defaultdrip3);
   }
 
   Future<void> assignDripData(String wifiGateway, String dataToSend) async {
     print('okay Data');
+    // saveDripData('HELLO');
     try {
       final response = await http.post(
         Uri.parse('http://$wifiGateway/receiveData'),
