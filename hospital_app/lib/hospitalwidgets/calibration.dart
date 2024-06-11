@@ -58,7 +58,7 @@ class _CalibrationWidgetState extends State<CalibrationWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Asign Drip',
+                'Assign Drip',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
