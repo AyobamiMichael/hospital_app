@@ -28,7 +28,6 @@ class BloodPressureAlertBoxState extends State<BloodPressureAlertBox> {
               onPressed: () {
                 // Handle Start button click
                 Navigator.of(context).pop();
-                // Add your logic for the Start action here
               },
             ),
             TextButton(
