@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hospital_app/hospitalwidgets/bloodpressurealert.dart';
+import 'package:hospital_app/hospitalwidgets/bpcheckerdisplay.dart';
 import 'package:hospital_app/hospitalwidgets/wireless.dart';
 import 'package:hospital_app/providers/deviceconnectedprovider.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class _BloodPressureState extends State<BloodPressure> {
   final _bpController2 = TextEditingController();
   static late List<String> listOfOxygenSensorValues;
   String oxygenInTheBlood = '';
-
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -42,16 +43,27 @@ class _BloodPressureState extends State<BloodPressure> {
     // WirelessClassState().sendData(WirelessClassState.wifiGateway!, 'oxygen');
 
     showOxygenIntheBlood();
-
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      showDialogBox();
-      print('TIMERSTARTED');
-    });
+    startTimer();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      showDialogBox();
+      print('TIMER STARTED');
+    });
+  }
+
+  void stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+      _timer = null;
+      print('TIMER STOPPED');
+    }
   }
 
   void showDialogBox() {
@@ -67,7 +79,13 @@ class _BloodPressureState extends State<BloodPressure> {
                   shape: CircleBorder(), backgroundColor: Colors.blue),
               child: Text("Start"),
               onPressed: () {
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                stopTimer();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BpCheckerDisplay()),
+                );
               },
             ),
             ElevatedButton(

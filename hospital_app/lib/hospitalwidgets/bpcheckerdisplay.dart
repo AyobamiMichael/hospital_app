@@ -12,11 +12,24 @@ class BpCheckerDisplay extends StatefulWidget {
 
 class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
   static late List<String> listOfValues;
+  String bpMonitorSys = '';
+  String bpMonitorDia = '';
+  String bpMonitorHr = '';
+
   @override
   void initState() {
     super.initState();
 
     fetchData(WirelessClassState.wifiGateway.toString());
+    WirelessClassState.listOfSensorValues = [];
+    if (WirelessClassState.listOfSensorValues.isNotEmpty) {
+      bpMonitorSys = WirelessClassState.listOfSensorValues[7].substring(22);
+      bpMonitorDia = WirelessClassState.listOfSensorValues[7].substring(22);
+      print(bpMonitorSys);
+    } else {
+      bpMonitorSys = '0';
+      bpMonitorDia = '0';
+    }
   }
 
   @override
@@ -25,7 +38,52 @@ class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
       appBar: AppBar(
         title: Text('Atlantis-UgarSoft'),
       ),
-      body: Center(child: LCDNumberDisplay(number: 12345)),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'SYS',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Center(child: LCDNumberDisplay(number: int.parse(bpMonitorSys))),
+          Divider(
+            height: 5,
+            thickness: 2,
+            color: Colors.grey[300],
+            indent: 20,
+            endIndent: 20,
+          ),
+          const Text(
+            'DIA',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Center(child: LCDNumberDisplay(number: int.parse(bpMonitorDia))),
+          Divider(
+            height: 5,
+            thickness: 2,
+            color: Colors.grey[300],
+            indent: 20,
+            endIndent: 20,
+          ),
+          const Text(
+            'DIA',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Center(child: LCDNumberDisplay(number: int.parse(bpMonitorDia))),
+          const SizedBox(
+            height: 30,
+          ),
+        ],
+      ),
     );
   }
 
