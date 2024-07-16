@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:hospital_app/hospitalwidgets/arduinohubwidget.dart';
 import 'package:hospital_app/hospitalwidgets/calibration.dart';
 import 'package:hospital_app/providers/deviceconnectedprovider.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +70,20 @@ class _SettingsState extends State<HospitalSettings> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const CalibrationWidget()),
+                );
+                // displayNotificationsDetails();
+              }),
+          IconButton(
+              icon: const Icon(Icons.hub),
+              iconSize: 50,
+              color: Colors.orange,
+              onPressed: () {
+                print('Okay');
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ArduinoHubPage()),
                 );
                 // displayNotificationsDetails();
               })
