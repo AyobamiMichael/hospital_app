@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hospital_app/hospitalwidgets/wireless.dart';
 import 'package:http/http.dart' as http;
@@ -12,24 +14,44 @@ class BpCheckerDisplay extends StatefulWidget {
 
 class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
   static late List<String> listOfValues;
-  String bpMonitorSys = '';
-  String bpMonitorDia = '';
+  double bpMonitorSys = 0.0;
+  double bpMonitorDia = 0.0;
   String bpMonitorHr = '';
+  String testingValue = '';
+  String bpMonitorDiaStringValue = '';
+
+  late Timer fectchingDataTimer;
 
   @override
   void initState() {
     super.initState();
 
+    //startTimer();
     fetchData(WirelessClassState.wifiGateway.toString());
-    WirelessClassState.listOfSensorValues = [];
-    if (WirelessClassState.listOfSensorValues.isNotEmpty) {
-      bpMonitorSys = WirelessClassState.listOfSensorValues[7].substring(22);
-      bpMonitorDia = WirelessClassState.listOfSensorValues[7].substring(22);
-      print(bpMonitorSys);
-    } else {
-      bpMonitorSys = '0';
-      bpMonitorDia = '0';
-    }
+  }
+
+  void startTimer() {
+    const duration = Duration(seconds: 2);
+    // Example
+    //fetchData(WirelessClassState.wifiGateway.toString());
+    fectchingDataTimer = Timer.periodic(duration, (Timer timer) {
+      WirelessClassState.listOfSensorValues = [];
+      if (WirelessClassState.listOfSensorValues.isNotEmpty) {
+        // bpMonitorSys = WirelessClassState.listOfSensorValues[7].substring(22);
+        //bpMonitorDia = WirelessClassState.listOfSensorValues[7].substring(22);
+        //testingValue = WirelessClassState.listOfSensorValues[3].substring(21);
+        //print(testingValue);
+      } else {
+        // bpMonitorSys = '0';
+        //bpMonitorDia = '0';
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    fectchingDataTimer.cancel();
   }
 
   @override
@@ -48,7 +70,7 @@ class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Center(child: LCDNumberDisplay(number: int.parse(bpMonitorSys))),
+          Center(child: LCDNumberDisplay(number: bpMonitorSys.toInt())),
           Divider(
             height: 5,
             thickness: 2,
@@ -63,7 +85,7 @@ class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Center(child: LCDNumberDisplay(number: int.parse(bpMonitorDia))),
+          Center(child: LCDNumberDisplay(number: bpMonitorDia.toInt())),
           Divider(
             height: 5,
             thickness: 2,
@@ -78,7 +100,7 @@ class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Center(child: LCDNumberDisplay(number: int.parse(bpMonitorDia))),
+          Center(child: LCDNumberDisplay(number: 500)),
           const SizedBox(
             height: 30,
           ),
@@ -95,13 +117,29 @@ class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
 
       // Parse HTML content
       final document = htmlparser.parse(responseBody);
-      // print(document);
+      //print(document);
       // Extract data from HTML
 
       final wirelessSensorValues = document.querySelectorAll('p');
 
       listOfValues =
           wirelessSensorValues.map((element) => element.text).toList();
+      print(listOfValues);
+      if (listOfValues.isNotEmpty) {
+        testingValue = listOfValues[3].substring(20);
+        bpMonitorDiaStringValue = listOfValues[7].substring(22);
+
+        double? nubValue = double.tryParse(testingValue);
+        double? bpMonitorV1 = double.tryParse(bpMonitorDiaStringValue);
+        //print(nubValue!);
+        setState(() {
+          bpMonitorSys = nubValue!;
+          bpMonitorDia = bpMonitorV1!;
+        });
+      } else {
+        bpMonitorSys = 0.0;
+        bpMonitorDia = 0.0;
+      }
     } catch (e) {
       print('Error: $e');
     }

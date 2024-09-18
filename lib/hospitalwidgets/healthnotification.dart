@@ -21,8 +21,8 @@ class HealthNotification extends StatefulWidget {
 }
 
 class _NotificationState extends State<HealthNotification> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  //FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //  FlutterLocalNotificationsPlugin();
 
   bool enableNotifications = false;
   bool enablePatientDirectNotifications = false;
