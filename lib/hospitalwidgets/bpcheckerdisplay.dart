@@ -126,7 +126,8 @@ class _BpCheckerDisplayState extends State<BpCheckerDisplay> {
           wirelessSensorValues.map((element) => element.text).toList();
       print(listOfValues);
       if (listOfValues.isNotEmpty) {
-        testingValue = listOfValues[3].substring(20);
+        testingValue = listOfValues[8].substring(22);
+        //listOfValues[3].substring(20);
         bpMonitorDiaStringValue = listOfValues[7].substring(22);
 
         double? nubValue = double.tryParse(testingValue);
@@ -183,7 +184,7 @@ class LCDDigit extends StatelessWidget {
           fontFamily:
               'Technology', // Ensure you have a digital font or use a built-in style
           fontSize: 48.0,
-          color: Colors.black,
+          color: Colors.blue,
         ),
       ),
     );
