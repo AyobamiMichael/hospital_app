@@ -55,7 +55,7 @@ class _HeartGraph2State extends State<HeartGraph2> {
 
   void getDataFromArduino() {
     // Assuming `WirelessClassState.listOfSensorValues[2]` contains sensor data
-    heartBeat2 = WirelessClassState.listOfSensorValues[2].substring(22);
+    heartBeat2 = WirelessClassState.listOfSensorValues[10].substring(20);
     double? pulse = double.tryParse(heartBeat2);
     if (pulse != null) {
       // Add new data point to the chart
