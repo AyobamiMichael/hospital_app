@@ -88,12 +88,12 @@ class _HeartGraph2State extends State<HeartGraph2> {
             ),
             series: <SplineSeries<SensorData, DateTime>>[
               SplineSeries<SensorData, DateTime>(
-                dataSource: _chartData,
-                xValueMapper: (SensorData data, _) => data.time,
-                yValueMapper: (SensorData data, _) => data.pulse,
-                color: Colors.red,
-                width: 2,
-              )
+                  dataSource: _chartData,
+                  xValueMapper: (SensorData data, _) => data.time,
+                  yValueMapper: (SensorData data, _) => data.pulse,
+                  color: Colors.red,
+                  width: 2,
+                  cardinalSplineTension: 0.0)
             ],
           ),
         ),
