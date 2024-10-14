@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/services.dart';
 import 'package:hospital_app/hospitalwidgets/bloodpressure.dart';
+import 'package:hospital_app/hospitalwidgets/ecggraph.dart';
 import 'package:hospital_app/hospitalwidgets/healthnotification.dart';
 import 'package:hospital_app/hospitalwidgets/heartgraph.dart';
 import 'package:hospital_app/hospitalwidgets/syncfusiongraph.dart';
@@ -439,7 +440,7 @@ class PatientScreenState extends State<PatientScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const NewHeartGraph2()),
+                      builder: (context) => const NewHeartGraph3()),
                 );
                 // linkToHeartApp();
                 //print('okay');

@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hospital_app/hospitalwidgets/wireless.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class NewHeartGraph2 extends StatelessWidget {
-  const NewHeartGraph2({Key? key}) : super(key: key);
+class NewHeartGraph3 extends StatelessWidget {
+  const NewHeartGraph3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,23 +46,43 @@ class _HeartGraph2State extends State<HeartGraph2> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
       setState(() {
-        getDataFromArduino();
+        _generateECGData();
       });
     });
   }
 
-  void getDataFromArduino() {
-    // Assuming `WirelessClassState.listOfSensorValues[2]` contains sensor data
-    heartBeat2 = WirelessClassState.listOfSensorValues[10].substring(20);
-    double? pulse = double.tryParse(heartBeat2);
-    if (pulse != null) {
-      // Add new data point to the chart
-      _chartData.add(SensorData(DateTime.now(), pulse));
-      if (_chartData.length > 30) {
-        _chartData.removeAt(0);
-      }
+  // Simulating ECG data for PQRST wave
+  void _generateECGData() {
+    final DateTime currentTime = DateTime.now();
+    final double simulatedECGValue = _simulatePQRSTWave();
+
+    // Add new data point to the chart
+    _chartData.add(SensorData(currentTime, simulatedECGValue));
+    if (_chartData.length > 100) {
+      // Keep the chart data manageable
+      _chartData.removeAt(0);
+    }
+  }
+
+  // Function to simulate PQRST waveform
+  double _simulatePQRSTWave() {
+    final int time = DateTime.now().millisecondsSinceEpoch % 2000;
+
+    // Define the PQRST waveform (values approximated for demo)
+    if (time < 100) {
+      return 0.05; // P-wave
+    } else if (time < 120) {
+      return 0.1; // PR segment
+    } else if (time < 150) {
+      return 1.2; // QRS complex (R-wave)
+    } else if (time < 180) {
+      return -0.5; // S-wave
+    } else if (time < 250) {
+      return 0.3; // T-wave
+    } else {
+      return 0; // Baseline
     }
   }
 
@@ -81,9 +101,9 @@ class _HeartGraph2State extends State<HeartGraph2> {
             primaryXAxis:
                 DateTimeAxis(majorGridLines: const MajorGridLines(width: 0)),
             primaryYAxis: NumericAxis(
-              minimum: 0,
-              maximum: 500,
-              interval: 10,
+              minimum: -1,
+              maximum: 2,
+              interval: 0.5,
               majorGridLines: const MajorGridLines(width: 0),
             ),
             series: <SplineSeries<SensorData, DateTime>>[
@@ -91,7 +111,7 @@ class _HeartGraph2State extends State<HeartGraph2> {
                 dataSource: _chartData,
                 xValueMapper: (SensorData data, _) => data.time,
                 yValueMapper: (SensorData data, _) => data.pulse,
-                color: Colors.red,
+                color: Colors.greenAccent,
                 width: 2,
               )
             ],
