@@ -440,7 +440,7 @@ class PatientScreenState extends State<PatientScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const NewHeartGraph3()),
+                      builder: (context) => const NewHeartGraph2()),
                 );
                 // linkToHeartApp();
                 //print('okay');
