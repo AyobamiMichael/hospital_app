@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hospital_app/hospitalwidgets/wireless.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class NewHeartGraph2 extends StatelessWidget {
   const NewHeartGraph2({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class _HeartGraph2State extends State<HeartGraph2> {
   final List<SensorData> _chartData = <SensorData>[];
   Timer? _timer;
   String heartBeat2 = '';
+  final _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -42,6 +44,8 @@ class _HeartGraph2State extends State<HeartGraph2> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -50,6 +54,7 @@ class _HeartGraph2State extends State<HeartGraph2> {
       setState(() {
         getDataFromArduino();
       });
+      _playBeepSound();
     });
   }
 
@@ -64,6 +69,13 @@ class _HeartGraph2State extends State<HeartGraph2> {
         _chartData.removeAt(0);
       }
     }
+  }
+
+  Future<void> _playBeepSound() async {
+    String audiopath = 'audio/beep.mp3';
+    await _audioPlayer.play(AssetSource(audiopath));
+
+    print("Audio Player result");
   }
 
   @override
@@ -81,8 +93,8 @@ class _HeartGraph2State extends State<HeartGraph2> {
             primaryXAxis:
                 DateTimeAxis(majorGridLines: const MajorGridLines(width: 0)),
             primaryYAxis: NumericAxis(
-              minimum: -1,
-              maximum: 1,
+              minimum: -2,
+              maximum: 2,
               interval: 0.5,
               majorGridLines: const MajorGridLines(width: 0),
             ),

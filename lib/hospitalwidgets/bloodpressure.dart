@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:html/parser.dart' as htmlparser;
 
+import 'package:audioplayers/audioplayers.dart';
+
 class BloodPressure extends StatefulWidget {
   const BloodPressure({super.key});
 
@@ -27,6 +29,8 @@ class _BloodPressureState extends State<BloodPressure> {
   static late List<String> listOfOxygenSensorValues;
   String oxygenInTheBlood = '';
   Timer? _timer;
+  //final _audioPlayer = AudioPlayer();
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +62,13 @@ class _BloodPressureState extends State<BloodPressure> {
     });
   }
 
+  // Future<void> _playBeepSound() async {
+  // String audiopath = 'audio/beep.mp3';
+  // await _audioPlayer.play(AssetSource(audiopath));
+
+  //print("Audio Player result");
+  // }
+
   void stopTimer() {
     if (_timer != null) {
       _timer!.cancel();
@@ -78,8 +89,9 @@ class _BloodPressureState extends State<BloodPressure> {
               style: ElevatedButton.styleFrom(
                   shape: CircleBorder(), backgroundColor: Colors.blue),
               child: Text("Start"),
-              onPressed: () {
+              onPressed: () async {
                 //Navigator.of(context).pop();
+                // _playBeepSound();
                 stopTimer();
                 Navigator.push(
                   context,

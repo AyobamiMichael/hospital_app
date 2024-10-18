@@ -156,7 +156,7 @@ class PatientScreenState extends State<PatientScreen> {
 
     // BLOOD PRESSURE DIALOG BOX TIMMER
     Timer.periodic(Duration(seconds: 60), (timer) {
-      showDialogBox();
+      //showDialogBox();
       print(' BLOOD PRESSURE TIMERSTARTED');
     });
   }
