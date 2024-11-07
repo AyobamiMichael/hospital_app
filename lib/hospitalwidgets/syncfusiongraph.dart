@@ -54,7 +54,7 @@ class _HeartGraph2State extends State<HeartGraph2> {
       setState(() {
         getDataFromArduino();
       });
-      _playBeepSound();
+      // _playBeepSound();
     });
   }
 
@@ -62,20 +62,30 @@ class _HeartGraph2State extends State<HeartGraph2> {
     // Assuming `WirelessClassState.listOfSensorValues[2]` contains sensor data
     heartBeat2 = WirelessClassState.listOfSensorValues[10].substring(20);
     double? pulse = double.tryParse(heartBeat2);
+    print('PULSE: $pulse');
     if (pulse != null) {
       // Add new data point to the chart
       _chartData.add(SensorData(DateTime.now(), pulse));
+      _playBeepSound();
       if (_chartData.length > 30) {
         _chartData.removeAt(0);
       }
+    } else if (pulse! <= 0.5) {
+      _chartData.add(SensorData(DateTime.now(), 0.0));
+      _playLowSignal();
     }
   }
 
   Future<void> _playBeepSound() async {
-    String audiopath = 'audio/beep.mp3';
+    String audiopath = 'audio/medicalmonitor.mp3';
     await _audioPlayer.play(AssetSource(audiopath));
 
     print("Audio Player result");
+  }
+
+  Future<void> _playLowSignal() async {
+    String audiopath = 'audio/lowmonitorsound.mp3';
+    await _audioPlayer.play(AssetSource(audiopath));
   }
 
   @override
