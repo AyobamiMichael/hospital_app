@@ -65,14 +65,18 @@ class _HeartGraph2State extends State<HeartGraph2> {
     print('PULSE: $pulse');
     if (pulse != null) {
       // Add new data point to the chart
+      // if (pulse > 0.5) {
       _chartData.add(SensorData(DateTime.now(), pulse));
       _playBeepSound();
+
       if (_chartData.length > 30) {
         _chartData.removeAt(0);
       }
-    } else if (pulse! <= 0.5) {
-      _chartData.add(SensorData(DateTime.now(), 0.0));
-      _playLowSignal();
+      //}
+      // else if (pulse < 0.5) {
+      //_chartData.add(SensorData(DateTime.now(), 0.0));
+      //_playLowSignal();
+      //}
     }
   }
 
