@@ -107,9 +107,9 @@ class _HeartGraph2State extends State<HeartGraph2> {
             primaryXAxis:
                 DateTimeAxis(majorGridLines: const MajorGridLines(width: 0)),
             primaryYAxis: NumericAxis(
-              minimum: -2,
-              maximum: 2,
-              interval: 0.5,
+              minimum: -1,
+              maximum: 1,
+              interval: 0.1,
               majorGridLines: const MajorGridLines(width: 0),
             ),
             series: <SplineSeries<SensorData, DateTime>>[
